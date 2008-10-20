@@ -9,7 +9,7 @@
 function get_or_create_readme(){
   var readme = jq("#readme");
   if (! readme.length) {
-    readme = "<div id='readme'></div>";
+    readme = jq("<div id='readme'><div class='plain'></div></div>");
     jq("#browser").after(readme);
   }
   return readme;
@@ -17,10 +17,33 @@ function get_or_create_readme(){
 
 function tohtml_callback(data){
   var readme = get_or_create_readme();
+  readme.find('.plain').empty().html(data.html);
 }
 
-function do_something(){
-  jq.getJSON("http://tohtml.heroku.com/convert?callback=?", {text: '#hi there'}, tohtml_callback);
+function push_text(text){
+  jq.getJSON("http://tohtml.heroku.com/convert?callback=?", {'text': text}, tohtml_callback);
+}
+
+function readme_form(){
+  var f = "<form id='readme_form'><textarea rows='20' cols='90'/><br /><input type='submit' value='Preview' /></form>";
+  var form = jq(f);
+  form.submit(function(){
+    push_text(jq(this).find('textarea').attr('value'));    
+    return false;
+  });
+  return form;
+}
+
+function init_readme_editor(){
+  var path = jq.trim(jq("#path")[0].lastChild.data);
+  if (path == "/" && jq('#readme_form').length == 0) {
+    var form = readme_form();
+    var readme = get_or_create_readme();
+    readme.after(form);
+  }
+  else {
+    return false;
+  }
 }
 
 function toggle_hashrocket(){
@@ -31,8 +54,8 @@ function toggle_hashrocket(){
 function helper_init(){
   // add a githelper element and return false if it exists (user pressed bookmarklet twice)
   jq('.watching h1').after("<a href='#' onclick='toggle_hashrocket()'>Toggle Hashrocket</a><br /><br />");
-  do_something();
+  init_readme_editor();
 }
 
-window.setTimeout(helper_init, 50);
-var jq = jq.noConflict();
+window.setTimeout(helper_init, 150);
+var jq = jQuery.noConflict();
