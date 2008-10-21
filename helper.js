@@ -6,26 +6,53 @@
 //  document.body.appendChild(s);
 //})();
 
+function chunk_text(text){
+  var chunks = [];
+  for(var i = 0; i < text.length; i+=1000){
+    chunks.push(text.substring(i, i+1000));
+  }
+  return chunks;
+}
+
 function get_or_create_readme(){
   var readme = jq("#readme");
   if (! readme.length) {
-    readme = jq("<div id='readme'><div class='plain'></div></div>");
+    readme = jq("<div id='readme'><div class='wikistyle'></div></div>");
     jq("#browser").after(readme);
   }
   return readme;
 }
 
 function tohtml_callback(data){
-  var readme = get_or_create_readme();
-  readme.find('.plain').empty().html(data.html);
+  //console.log("callback");
+  //console.log(data);
+  if (data.complete){
+    var readme = get_or_create_readme();
+    readme.find('.wikistyle').empty().html(data.html);
+  }
 }
-
 function push_text(text){
-  jq.getJSON("http://tohtml.heroku.com/convert?callback=?", {'text': text}, tohtml_callback);
+  var chunked = chunk_text(text);
+  jq.each(chunked, function(i, text){
+    var data = {'text': text, 'repo': window.location.pathname}
+    if (chunked.length == 1) {
+      jq.extend(data, {'progress': 'all'});
+    }
+    else if (i == 0){
+      jq.extend(data, {'progress': 'begin'});
+    }
+    else if ((i+1) == chunked.length){
+      jq.extend(data, {'progress': 'end'});
+    }
+    else {
+      jq.extend(data, {'progress': 'middle'});
+    }
+    jq.getJSON("http://localhost:4000/readmes/convert?callback=?", data, tohtml_callback);
+  });
 }
 
 function readme_form(){
-  var f = "<form id='readme_form'><textarea rows='20' cols='90'/><br /><input type='submit' value='Preview' /></form>";
+  var f = "<form id='readme_form'><textarea rows='10' cols='90'/><br /><input type='submit' value='Preview' /></form>";
   var form = jq(f);
   form.submit(function(){
     push_text(jq(this).find('textarea').attr('value'));    
