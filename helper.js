@@ -47,7 +47,7 @@ function push_text(text){
     else {
       jq.extend(data, {'progress': 'middle'});
     }
-    jq.getJSON("http://localhost:4000/readmes/convert?callback=?", data, tohtml_callback);
+    jq.getJSON("http://tohtml.heroku.com/readmes/convert?callback=?", data, tohtml_callback);
   });
 }
 
@@ -62,7 +62,9 @@ function readme_form(){
 }
 
 function init_readme_editor(){
-  var path = jq.trim(jq("#path")[0].lastChild.data);
+  var path = jq("#path");
+  if (! path.length) { return; }
+  path = jq.trim(path[0].lastChild.data);
   if (path == "/" && jq('#readme_form').length == 0) {
     var form = readme_form();
     var readme = get_or_create_readme();
@@ -78,9 +80,14 @@ function toggle_hashrocket(){
   return false;
 }
 
+function init_toggle(){ 
+  if (! jq('#toggle_hashrocket').length){
+    jq('.watching h1').after("<a id='toggle_hashrocket' href='#' onclick='toggle_hashrocket()'>Toggle Hashrocket</a><br /><br />");
+  }
+}
+
 function helper_init(){
-  // add a githelper element and return false if it exists (user pressed bookmarklet twice)
-  jq('.watching h1').after("<a href='#' onclick='toggle_hashrocket()'>Toggle Hashrocket</a><br /><br />");
+  init_toggle();
   init_readme_editor();
 }
 
