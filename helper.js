@@ -20,7 +20,12 @@ function get_or_create_readme(){
     readme = jq("<div id='readme'><div class='wikistyle'></div></div>");
     jq("#browser").after(readme);
   }
+  readme.find('.plain').removeClass('plain').addClass('wikistyle');
   return readme;
+}
+
+function get_markup(){
+  return jq('#readme_form input:checked').attr('value');
 }
 
 function tohtml_callback(data){
@@ -33,8 +38,9 @@ function tohtml_callback(data){
 }
 function push_text(text){
   var chunked = chunk_text(text);
+  var markup = get_markup();
   jq.each(chunked, function(i, text){
-    var data = {'text': text, 'repo': window.location.pathname}
+    var data = {'text': text, 'repo': window.location.pathname, 'markup': markup}
     if (chunked.length == 1) {
       jq.extend(data, {'progress': 'all'});
     }
@@ -52,7 +58,8 @@ function push_text(text){
 }
 
 function readme_form(){
-  var f = "<form id='readme_form'><textarea rows='10' cols='90'/><br /><input type='submit' value='Preview' /></form>";
+  var selects = "<p><input type='radio' name='markup' value='markdown' checked='checked'/> Markdown</p>"
+  var f = "<form id='readme_form'><textarea rows='10' cols='90'/><br />"+selects+"<input type='submit' value='Preview' /></form>";
   var form = jq(f);
   form.submit(function(){
     push_text(jq(this).find('textarea').attr('value'));    

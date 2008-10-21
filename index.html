@@ -1,25 +1,41 @@
 <html>
 <head>
 <title>githelper bookmarklet</title>
+<style>
+body { color: #262626; background:#F9F9F0; }
+h1, h2, h3, h4, h5, h6 { color: #222; }
+ul li { margin-bottom: 12px; }
+li.img { list-style-type: none; }
+a { color: #4183C4; }
+a:hover { text-decoration: underline; }
+</style>
 <head>
 <body>
 <h1>githelper <small>&ndash; github bookmarklet</small></h1>
 <p>Designed to add helpful UI elements to github.com</p>
-<h4>Features</h4>
+<h2>Features</h2>
 <ul>
   <li>Adds a link to your dashboard which toggles the Hashrocket projects under "watched repositories"</li>
+  <li class='img'><img src="images/githelper-toggle.png" /></li>
+  <li>Adds a textbox to your root repository allowing you to live preview your readme file. (markdown supported, textile next)</li>
+  <li class='img'><img src="images/githelper-markdown.png" /></li>
 </ul>
-<img src="images/githelper-toggle.png" />
 <br />
 <p>
-<h4>Install</h4>
+<h2>Install</h2>
 <ol>
   <li>Drag 
-  <a href="javascript:(function(){s=document.createElement('script');%20s.type='text/javascript';%20s.src='http://turriate.com/media/githelper/helper.js';%20document.body.appendChild(s);%20})();">githelper</a>
+  <a href="javascript:(function(){s=document.createElement('script');%20s.type='text/javascript';%20s.src='http://turriate.com/media/githelper/helper.js?'+(new Date).getTime();%20document.body.appendChild(s);%20})();">githelper</a>
   to your bookmarks</li>
   <li>Visit your <a href="http://github.com">github</a> dashboard</li>
   <li>Click the bookmarklet</li>
 </ol>
 </p>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-147954-7";
+urchinTracker();
+</script>
 </body>
 </html>
