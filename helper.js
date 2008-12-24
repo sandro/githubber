@@ -89,7 +89,7 @@ function toggle_hashrocket(){
 
 function init_toggle(){ 
   if (! jq('#toggle_hashrocket').length){
-    jq('.watching h1').after("<a id='toggle_hashrocket' href='#' onclick='toggle_hashrocket()'>Toggle Hashrocket</a><br /><br />");
+    jq('.watching h1').after("<a id='toggle_hashrocket' href='#' onclick='toggle_hashrocket(); return false;'>Toggle Hashrocket</a><br /><br />");
   }
 }
 
