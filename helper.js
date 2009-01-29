@@ -87,15 +87,30 @@ function toggle_hashrocket(){
   return false;
 }
 
-function init_toggle(){ 
+function init_toggle(){
   if (! jq('#toggle_hashrocket').length){
     jq('.watching h1').after("<a id='toggle_hashrocket' href='#' onclick='toggle_hashrocket(); return false;'>Toggle Hashrocket</a><br /><br />");
   }
 }
 
+function init_gist_bookmarklet(){
+  if (window.location.host != "gist.github.com") { return }
+  var repo_meta = jQuery(".repo .meta");
+  var gist_url = window.location.href + ".txt";
+  var gist_name = jQuery('#files .info span').text();
+  var container = jq("<div id='bookmarklet' style='clear:left'></div>");
+  var bookmarklet_src = "javascript:(function(){s=document.createElement('script');s.type='text/javascript';s.src='"+gist_url+"';document.body.appendChild(s);})();";
+  var link = jQuery("<a>" + gist_name + "</a>").attr('href', bookmarklet_src);
+
+  container.append("<span>Bookmarklet Link: </span>");
+  container.append(link);
+  repo_meta.append(container);
+}
+
 function helper_init(){
   init_toggle();
   init_readme_editor();
+  init_gist_bookmarklet();
 }
 
 window.setTimeout(helper_init, 150);
