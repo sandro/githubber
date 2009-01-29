@@ -95,12 +95,14 @@ function init_toggle(){
 
 function init_gist_bookmarklet(){
   if (window.location.host != "gist.github.com") { return }
-  var repo_meta = jQuery(".repo .meta");
+  if (jq("#bookmarklet").length) { return }
+
+  var repo_meta = jq(".repo .meta");
   var gist_url = window.location.href + ".txt";
-  var gist_name = jQuery('#files .info span').text();
+  var gist_name = jq('#files .info span').text();
   var container = jq("<div id='bookmarklet' style='clear:left'></div>");
   var bookmarklet_src = "javascript:(function(){s=document.createElement('script');s.type='text/javascript';s.src='"+gist_url+"';document.body.appendChild(s);})();";
-  var link = jQuery("<a>" + gist_name + "</a>").attr('href', bookmarklet_src);
+  var link = jq("<a>" + gist_name + "</a>").attr('href', bookmarklet_src);
 
   container.append("<span>Bookmarklet Link: </span>");
   container.append(link);
