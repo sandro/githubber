@@ -98,8 +98,10 @@ function init_gist_bookmarklet(){
   if (jq("#bookmarklet").length) { return }
 
   var repo_meta = jq(".repo .meta");
-  var gist_url = window.location.href + ".txt";
   var gist_name = jq('#files .info span').text();
+  var gist_id = jq.trim(jq(".repo .path").text().replace("gist: ", ""));
+  var gist_url = "http://gist.github.com/" + gist_id + ".txt";
+
   var container = jq("<div id='bookmarklet' style='clear:left'></div>");
   var bookmarklet_src = "javascript:(function(){s=document.createElement('script');s.type='text/javascript';s.src='"+gist_url+"';document.body.appendChild(s);})();";
   var link = jq("<a>" + gist_name + "</a>").attr('href', bookmarklet_src);
